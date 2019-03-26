@@ -12,10 +12,10 @@
       <router-link tag="a" :to="{path:'clients'}">Clientes</router-link>
     </el-menu-item>
     <el-menu-item index="3">
-      <router-link tag="a" :to="{path:'Employes'}">Empleados</router-link>
+      <router-link tag="a" :to="{path:'employes'}">Empleados</router-link>
     </el-menu-item>
     <el-menu-item index="5">
-      <a href="https://www.ele.me" target="_blank">Supplidores</a>
+      <router-link tag="a" :to="{path:'suppliers'}">Supplidores</router-link>
     </el-menu-item>
     <el-menu-item index="6">
       <a href="https://www.ele.me" target="_blank">Productos</a>

@@ -4,6 +4,7 @@ import Login from "../components/auth/Login";
 import Home from "../components/home/Home";
 import Client from "../components/client/Client";
 import Employe from '../components/employe/Employe'
+import Suppler from '../components/supplier/Supplier'
 Vue.use(Router);
 export default new Router({
   routes: [
@@ -11,6 +12,8 @@ export default new Router({
     { path: "/Home", name: "home", component: Home },
     { path: "/clients", name: "Client", component: Client },
     { path: "/employes", name: "Employe", component: Employe },
+    { path: "/suppliers", name: "Supplier", component: Suppler },
+
     {
       path: "/login",
       name: "Login",
