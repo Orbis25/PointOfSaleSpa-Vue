@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header><Navbar></Navbar></el-header>
+      <el-header>
+        <Navbar v-if="$route.path==='/login' ? false : true"></Navbar>
+        </el-header>
       <el-container>
         <el-main>
           <router-view/>
@@ -10,7 +12,6 @@
     </el-container>
   </div>
 </template>
-
 <script>
 import Navbar from "../src/components/share/Navbar";
 export default {
@@ -20,5 +21,4 @@ export default {
   }
 };
 </script>
-<style>
-</style>
+

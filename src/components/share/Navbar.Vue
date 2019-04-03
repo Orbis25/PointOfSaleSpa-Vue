@@ -18,7 +18,7 @@
       <router-link tag="a" :to="{path:'suppliers'}">Supplidores</router-link>
     </el-menu-item>
     <el-menu-item index="6">
-      <a href="https://www.ele.me" target="_blank">Productos</a>
+      <router-link tag="a" :to="{path: 'product'}">Productos</router-link>
     </el-menu-item>
     <el-submenu class="acciones" index="7">
       <template slot="title">Acciones</template>

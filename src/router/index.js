@@ -5,6 +5,7 @@ import Home from "../components/home/Home";
 import Client from "../components/client/Client";
 import Employe from '../components/employe/Employe'
 import Suppler from '../components/supplier/Supplier'
+import Product from '../components/product/Product'
 Vue.use(Router);
 export default new Router({
   routes: [
@@ -21,6 +22,11 @@ export default new Router({
       meta: {
         requirevisitors: true
       }
+    },
+    {
+      path:"/product",
+      name:"Product",
+      component:Product
     }
   ]
 });
