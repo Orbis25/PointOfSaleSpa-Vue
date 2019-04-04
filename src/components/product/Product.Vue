@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="24">
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
-        <h1 class="mb-4 ml-4">Productos</h1>
+        <h1 class="mb-4 ml-4 animated bounceInRight">Productos</h1>
         <el-button icon="el-icon-circle-plus-outline">Nuevo</el-button>
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">

@@ -2,8 +2,8 @@
   <div>
     <el-row :gutter="24">
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
-        <h1 class="mb-4 ml-4">Empleados</h1>
-        <el-button icon="el-icon-circle-plus-outline">Nuevo</el-button>
+        <h1 class="mb-4 ml-4 animated bounceInRight">Empleados</h1>
+        <Add></Add>
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
@@ -33,7 +33,11 @@
 </template>
 
 <script>
+import Add from './Add'
 export default {
+  components:{
+    Add
+  },
   data() {
     return {
       tableData: [

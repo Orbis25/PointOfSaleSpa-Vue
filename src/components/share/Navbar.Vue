@@ -18,13 +18,19 @@
       <router-link tag="a" :to="{path:'suppliers'}">Supplidores</router-link>
     </el-menu-item>
     <el-menu-item index="6">
-      <router-link tag="a" :to="{path: 'product'}">Productos</router-link>
+      <router-link tag="a" :to="{path: 'products'}">Productos</router-link>
     </el-menu-item>
     <el-submenu class="acciones" index="7">
       <template slot="title">Acciones</template>
-      <el-menu-item index="2-1">Reportes</el-menu-item>
-      <el-menu-item index="2-2">Salir</el-menu-item>
+      <el-menu-item index="2-1">Usuario</el-menu-item>
+      <el-menu-item index="2-2">Ventas</el-menu-item>
+      <el-menu-item index="2-3">Facturas</el-menu-item>
+      <el-menu-item index="2-4">Reportes</el-menu-item>
+      <el-menu-item index="2-5">Salir</el-menu-item>
     </el-submenu>
+     <el-menu-item index="8">
+      <router-link tag="a" :to="{path: 'products'}">Admin</router-link>
+    </el-menu-item>
   </el-menu>
 </template>
 
