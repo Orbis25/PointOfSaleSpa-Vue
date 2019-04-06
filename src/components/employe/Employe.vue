@@ -10,8 +10,10 @@
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
         >
-          <el-table-column label="Date" prop="date"></el-table-column>
-          <el-table-column label="Name" prop="name"></el-table-column>
+          <el-table-column label="Codigo" prop="date"></el-table-column>
+          <el-table-column label="Nombre" prop="name"></el-table-column>
+          <el-table-column label="Fecha de creacion" prop="name"></el-table-column>
+          <el-table-column label="Cedula" prop="name"></el-table-column>
           <el-table-column align="right">
             <template slot="header" slot-scope="scope">
               <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
@@ -41,46 +43,6 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-04",
-          name: "John",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-01",
-          name: "Morgan",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-03",
-          name: "Jessy",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-04",
-          name: "John",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-01",
-          name: "Morgan",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-03",
-          name: "Jessy",
-          address: "No. 189, Grove St, Los Angeles"
-        },
         {
           date: "2016-05-02",
           name: "Tom",

@@ -6,9 +6,11 @@ import Client from "../components/client/Client";
 import Employe from '../components/employe/Employe'
 import Suppler from '../components/supplier/Supplier'
 import Product from '../components/product/Product'
+import NotFound from '../components/share/404'
 Vue.use(Router);
 export default new Router({
   routes: [
+    { path: '*', component: NotFound },
     { path: "/", name: "Home", component: Home },
     { path: "/Home", name: "home", component: Home },
     { path: "/clients", name: "Client", component: Client },

@@ -3,15 +3,26 @@
     <el-row :gutter="24">
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <h1 class="mb-4 ml-4 animated bounceInRight">Productos</h1>
-        <el-button icon="el-icon-circle-plus-outline">Nuevo</el-button>
+        <div class="row">
+          <div class="col-1">
+            <add></add>
+          </div>
+          <div class="col-1">
+            <spent></spent>
+          </div>
+        </div>
       </el-col>
+
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
         >
-          <el-table-column label="Date" prop="date"></el-table-column>
-          <el-table-column label="Name" prop="name"></el-table-column>
+          <el-table-column label="Codigo" prop="date"></el-table-column>
+          <el-table-column label="Nombre" prop="name"></el-table-column>
+          <el-table-column label="Cantidad" prop="name"></el-table-column>
+          <el-table-column label="Precio" prop="name"></el-table-column>
+          <el-table-column label="Fecha de creacion" prop="name"></el-table-column>
           <el-table-column align="right">
             <template slot="header" slot-scope="scope">
               <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
@@ -33,7 +44,13 @@
 </template>
 
 <script>
+import add from "./Add";
+import spent from "./Spent";
 export default {
+  components: {
+    add,
+    spent
+  },
   data() {
     return {
       tableData: [
@@ -82,7 +99,6 @@ export default {
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles"
         }
-        
       ],
       search: ""
     };

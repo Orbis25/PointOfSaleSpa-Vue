@@ -20,7 +20,11 @@
     <el-menu-item index="6">
       <router-link tag="a" :to="{path: 'products'}">Productos</router-link>
     </el-menu-item>
-    <el-submenu class="acciones" index="7">
+    <el-menu-item index="7">
+      <alert></alert>
+    </el-menu-item>
+
+    <el-submenu class="acctions" index="8">
       <template slot="title">Acciones</template>
       <el-menu-item index="2-1">Usuario</el-menu-item>
       <el-menu-item index="2-2">Ventas</el-menu-item>
@@ -28,14 +32,18 @@
       <el-menu-item index="2-4">Reportes</el-menu-item>
       <el-menu-item index="2-5">Salir</el-menu-item>
     </el-submenu>
-     <el-menu-item index="8">
+    <el-menu-item index="9">
       <router-link tag="a" :to="{path: 'products'}">Admin</router-link>
     </el-menu-item>
   </el-menu>
 </template>
 
 <script>
+import alert from "./alert";
 export default {
+  components: {
+    alert
+  },
   name: "Navbar",
   data: () => ({
     activeIndex: "1",
@@ -50,7 +58,7 @@ export default {
 </script>
 
 <style Scoped>
-.acciones {
+.acctions {
   margin-left: 500px;
 }
 </style>

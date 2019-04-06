@@ -53,6 +53,6 @@ export default {
 <style Scoped>
 .card{
     width: 800px;
-    /* padding: 20px; */
+    top:-100px;
 }
 </style>

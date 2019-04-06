@@ -10,8 +10,11 @@
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
         >
-          <el-table-column label="Date" prop="date"></el-table-column>
-          <el-table-column label="Name" prop="name"></el-table-column>
+          <el-table-column label="Codigo" prop="date"></el-table-column>
+          <el-table-column label="Nombre" prop="name"></el-table-column>
+          <el-table-column label="Fecha de creacion" prop="name"></el-table-column>
+          <el-table-column label="Compañia" prop="name"></el-table-column>
+
           <el-table-column align="right">
             <template slot="header" slot-scope="scope">
               <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
