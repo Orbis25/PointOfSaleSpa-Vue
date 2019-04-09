@@ -5,12 +5,13 @@ import App from './App'
 import router from './router'
 import store from './store/index'
 import ElementUI from "element-ui";
+import locale from 'element-ui/lib/locale/lang/es'
 import "element-ui/lib/theme-chalk/index.css";
 import "element-ui/lib/theme-chalk/display.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "animate.css"
-
-Vue.use(ElementUI);
+//change lenguaje to spanish
+Vue.use(ElementUI , {locale});
 
 Vue.config.productionTip = false
 

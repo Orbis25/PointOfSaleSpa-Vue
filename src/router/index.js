@@ -7,6 +7,7 @@ import Employe from '../components/employe/Employe'
 import Suppler from '../components/supplier/Supplier'
 import Product from '../components/product/Product'
 import NotFound from '../components/share/404'
+import User from '../components/user/User'
 Vue.use(Router);
 export default new Router({
   routes: [
@@ -16,7 +17,7 @@ export default new Router({
     { path: "/clients", name: "Client", component: Client },
     { path: "/employes", name: "Employe", component: Employe },
     { path: "/suppliers", name: "Supplier", component: Suppler },
-
+    { path: "/user/:id" , name:"user" , component : User},
     {
       path: "/login",
       name: "Login",
@@ -29,6 +30,7 @@ export default new Router({
       path:"/products",
       name:"Product",
       component:Product
-    }
+    },
+    
   ]
 });

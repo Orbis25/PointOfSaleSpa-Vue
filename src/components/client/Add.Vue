@@ -1,8 +1,8 @@
 <template>
-  <div >
+  <div>
     <el-button icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">Nuevo</el-button>
-    <el-dialog class="" title="Datos del Nuevo Cliente" :visible.sync="dialogFormVisible">
-      <el-form class="animated bounceIn" :model="form" :rules="rules" ref="form">
+    <el-dialog class title="Datos del Nuevo Cliente" :visible.sync="dialogFormVisible">
+      <el-form class="animated fadeIn" :model="form" :rules="rules" ref="form">
         <el-form-item label="Codigo" :label-width="formLabelWidth">
           <el-input v-model="form.clientCode" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
@@ -11,6 +11,9 @@
         </el-form-item>
         <el-form-item label="Apellidos" :label-width="formLabelWidth" prop="lastName">
           <el-input v-model="form.lastName" placeholder="Ej: Batman..." autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Numero" :label-width="formLabelWidth" prop="phoneNumber">
+          <el-input v-model="form.phoneNumber" placeholder="Ej: 80963244963" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="Dirreccion" prop="address" :label-width="formLabelWidth">
           <el-input
@@ -37,6 +40,7 @@ export default {
         name: "",
         lastName: "",
         address: "",
+        phoneNumber: "",
         clientCode: `CL-${Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000}`
       },
       rules: {
@@ -58,6 +62,14 @@ export default {
           {
             required: true,
             message: "Porfavor ingresar la dirreccion",
+            trigger: "blur"
+          }
+        ],
+        phoneNumber: [
+          {
+            required: true,
+            pattern: /\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/,
+            message: "Porfavor ingrese un numero",
             trigger: "blur"
           }
         ]

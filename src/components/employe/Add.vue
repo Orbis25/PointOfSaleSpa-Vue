@@ -2,7 +2,7 @@
   <div>
     <el-button icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">Nuevo</el-button>
     <el-dialog class title="Datos del Nuevo Empleado" :visible.sync="dialogFormVisible">
-      <el-form class="animated bounceIn" :model="form" :rules="rules" ref="form">
+      <el-form class="animated fadeIn" :model="form" :rules="rules" ref="form">
         <el-form-item label="Codigo" :label-width="formLabelWidth">
           <el-input v-model="form.employeecode" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>

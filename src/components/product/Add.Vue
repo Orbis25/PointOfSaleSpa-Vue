@@ -2,9 +2,9 @@
   <div>
     <el-button icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">Nuevo</el-button>
     <el-dialog class title="Datos del Nuevo Producto" :visible.sync="dialogFormVisible">
-      <el-form class="animated bounceIn" :model="form" :rules="rules" ref="form">
+      <el-form class="animated fadeIn" :model="form" :rules="rules" ref="form">
         <el-form-item label="Codigo" :label-width="formLabelWidth">
-          <el-input v-model="form.employeecode" autocomplete="off" :disabled="true"></el-input>
+          <el-input v-model="form.productCode" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="Nombre" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" placeholder="Ej: Iphone 6s" autocomplete="off"></el-input>
@@ -47,14 +47,14 @@ export default {
         name: "",
         model: "",
         address: "",
-        employeecode: `PD-${Math.floor(Math.random() * (9999 - 1000 + 1)) +
+        productCode: `PD-${Math.floor(Math.random() * (9999 - 1000 + 1)) +
           1000}`,
         type: "",
         avatar: "1",
         brand: "",
         quantity: "",
         price: "",
-        supplierId: ''
+        supplierId: ""
       },
       rules: {
         name: [
