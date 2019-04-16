@@ -29,15 +29,16 @@
       <el-menu-item index="2-1">
         <router-link tag="p" :to="{path:'/user/id'}">Usuario</router-link>
       </el-menu-item>
-      <el-menu-item index="2-2">Ventas</el-menu-item>
-      <el-menu-item index="2-3">Facturas</el-menu-item>
+      <el-menu-item index="2-2">
+        <router-link tag="p" :to="{path:'/sale'}">Ventas</router-link>
+      </el-menu-item>
       <el-menu-item index="2-4">Reportes</el-menu-item>
       <el-menu-item index="2-5">
         <router-link tag="p" :to="{path:'/login'}">Salir</router-link>
       </el-menu-item>
     </el-submenu>
     <el-menu-item index="8">
-      <router-link tag="a" :to="{path: 'products'}">Admin</router-link>
+      <span>Admin</span>
     </el-menu-item>
   </el-menu>
 </template>
