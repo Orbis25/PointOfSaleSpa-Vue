@@ -9,6 +9,7 @@
         <el-table
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
+          height="600"
         >
           <el-table-column label="Codigo" prop="date"></el-table-column>
           <el-table-column label="Nombre" prop="name"></el-table-column>

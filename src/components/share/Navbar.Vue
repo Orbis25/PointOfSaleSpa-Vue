@@ -55,19 +55,13 @@ export default {
     activeIndex2: "1"
   }),
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    }
+    handleSelect(key, keyPath) {}
   }
 };
 </script>
 
 <style Scoped>
-.acctions {
-  /* margin-left: 400px; */
-}
-.alert-to{
+.alert-to {
   margin-left: 400px;
-
 }
 </style>

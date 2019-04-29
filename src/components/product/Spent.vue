@@ -4,15 +4,13 @@
       <el-button @click="dialogTableVisible = true">Agotados</el-button>
     </el-badge>
     <el-dialog title="Agotados" :visible.sync="dialogTableVisible">
-      <el-table :data="gridData">
+      <el-table :data="gridData" height="600">
         <el-table-column property="date" label="Producto" width="150"></el-table-column>
         <el-table-column property="name" label="Marca" width="200"></el-table-column>
         <el-table-column align="center">
-          <template slot="header" slot-scope="scope">
-            Cantidad
-          </template>
+          <template slot="header" slot-scope="scope">Cantidad</template>
           <template slot-scope="scope">
-              <el-input-number v-model="num" :min="1"></el-input-number>
+            <el-input-number v-model="num" :min="1"></el-input-number>
           </template>
         </el-table-column>
       </el-table>

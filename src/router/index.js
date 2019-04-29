@@ -10,6 +10,7 @@ import NotFound from "../components/share/404";
 import User from "../components/user/Profile";
 import Sale from "../components/sale/Sale";
 import AddSale from "../components/sale/Add";
+import Detail from "../components/sale/Detail";
 Vue.use(Router);
 export default new Router({
   routes: [
@@ -22,6 +23,7 @@ export default new Router({
     { path: "/user/:id", name: "user", component: User },
     { path: "/sale", name: "sale", component: Sale },
     { path: "/sale/add", name: "addSale", component: AddSale },
+    { path: "/sale/:id/detail", name: "detail", component: Detail },
     {
       path: "/login",
       name: "Login",

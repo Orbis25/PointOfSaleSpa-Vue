@@ -9,6 +9,7 @@
         <el-table
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
+            height="600"
         >
           <el-table-column label="Codigo" prop="date"></el-table-column>
           <el-table-column label="Nombre" prop="name"></el-table-column>
@@ -19,7 +20,9 @@
               <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
             </template>
             <template slot-scope="scope">
-              <!-- <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">Ver</el-button> -->
+              <router-link :to="{path:`sale/${scope.row.id}/detail`}"  >
+              <el-button size="mini" type="primary">ver</el-button>
+              </router-link>
               <el-button
                 size="mini"
                 type="danger"

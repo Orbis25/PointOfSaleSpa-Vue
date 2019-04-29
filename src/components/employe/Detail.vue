@@ -13,6 +13,19 @@
               <div class="text-center">
                 <img src="@/assets/logo.png" alt>
               </div>
+              <div v-show="!edit" class="text-center input-group mb-3">
+                <div class="custom-file">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="inputGroupFile01"
+                    aria-describedby="inputGroupFileAddon01"
+                    @change="img=true"
+                  >
+                  <label class="custom-file-label" for="inputGroupFile01">Subir imagen</label>
+                  <label for v-show="img">Avatar cargado</label>
+                </div>
+              </div>
             </el-card>
           </div>
           <div class="col">
@@ -94,6 +107,7 @@ export default {
         avatar: "1",
         dni: ""
       },
+      img: false,
       rules: {
         name: [
           {

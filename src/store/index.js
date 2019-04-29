@@ -1,10 +1,17 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
+import services from "./services";
 Vue.use(Vuex);
 
-const state = { 
-}
+const state = {
+  services
+};
+
+const getters = {
+
+};
 
 export default new Vuex.Store({
-    state
-})
+  state,
+  getters
+});

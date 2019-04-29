@@ -12,32 +12,34 @@
           </div>
         </div>
       </el-col>
-
-      <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
-        <el-table
-          :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-          style="width: 100%"
-        >
-          <el-table-column label="Codigo" prop="date"></el-table-column>
-          <el-table-column label="Nombre" prop="name"></el-table-column>
-          <el-table-column label="Cantidad" prop="name"></el-table-column>
-          <el-table-column label="Precio" prop="name"></el-table-column>
-          <el-table-column align="right">
-            <template slot="header" slot-scope="scope">
-              <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
-            </template>
-            <template slot-scope="scope">
-              <detail></detail>
-              <!-- <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">Ver</el-button> -->
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row);remove()"
-              >Eliminar</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
+      <div >
+        <el-col class="tab" :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
+          <el-table
+            :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+            style="width: 100%"
+            height="600"
+          >
+            <el-table-column label="Codigo" prop="date"></el-table-column>
+            <el-table-column label="Nombre" prop="name"></el-table-column>
+            <el-table-column label="Cantidad" prop="name"></el-table-column>
+            <el-table-column label="Precio" prop="name"></el-table-column>
+            <el-table-column align="right">
+              <template slot="header" slot-scope="scope">
+                <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
+              </template>
+              <template slot-scope="scope">
+                <detail></detail>
+                <!-- <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">Ver</el-button> -->
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row);remove()"
+                >Eliminar</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </div>
     </el-row>
   </div>
 </template>
@@ -128,7 +130,7 @@ export default {
             message: "Operacion cancelada"
           });
         });
-    } 
+    }
   }
 };
 </script>
