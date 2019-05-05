@@ -15,15 +15,61 @@ Vue.use(Router);
 export default new Router({
   routes: [
     { path: "*", component: NotFound },
-    { path: "/", name: "Home", component: Home },
-    { path: "/Home", name: "home", component: Home },
-    { path: "/clients", name: "Client", component: Client },
-    { path: "/employes", name: "Employe", component: Employe },
-    { path: "/suppliers", name: "Supplier", component: Suppler },
-    { path: "/user/:id", name: "user", component: User },
-    { path: "/sale", name: "sale", component: Sale },
-    { path: "/sale/add", name: "addSale", component: AddSale },
-    { path: "/sale/:id/detail", name: "detail", component: Detail },
+    {
+      path: "/",
+      name: "Home",
+      component: Home,
+
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/Home",
+      name: "home",
+      component: Home,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/clients",
+      name: "Client",
+      component: Client,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/employes",
+      name: "Employe",
+      component: Employe,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/suppliers",
+      name: "Supplier",
+      component: Suppler,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/user/:id",
+      name: "user",
+      component: User,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/sale",
+      name: "sale",
+      component: Sale,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/sale/add",
+      name: "addSale",
+      component: AddSale,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/sale/:id/detail",
+      name: "detail",
+      component: Detail,
+      meta: { requiresAuth: true }
+    },
     {
       path: "/login",
       name: "Login",
@@ -35,7 +81,8 @@ export default new Router({
     {
       path: "/products",
       name: "Product",
-      component: Product
+      component: Product,
+      meta: { requiresAuth: true }
     }
   ]
 });

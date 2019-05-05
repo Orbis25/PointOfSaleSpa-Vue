@@ -1,26 +1,27 @@
 <template>
   <span>
-    <el-button type="primary" size="mini" @click="dialogFormVisible = true">Ver</el-button>
+    <el-button type="primary" size="mini" @click="dialogFormVisible = true; getById()">Ver</el-button>
     <el-dialog :visible.sync="dialogFormVisible">
       <el-button type="primary" @click="edit = !edit">
         Editar
         <i class="el-icon-edit"></i>
       </el-button>
-      <el-form class="animated fadeIn" :model="form" :rules="rules" ref="form">
+      <el-form v-loading="loading" class="animated fadeIn" :model="form" :rules="rules" ref="form">
         <div class="row">
           <div class="col">
             <el-card shadow="hover" class="card-img">
               <div class="text-center">
-                <img src="@/assets/logo.png" alt>
+                <img :src="`${IMG}${form.avatar}`" class="img-cent" height="250px" alt>
               </div>
               <div v-show="!edit" class="text-center input-group mb-3">
                 <div class="custom-file">
                   <input
+                    id="inputGroupFile01"
+                    ref="file"
                     type="file"
                     class="custom-file-input"
-                    id="inputGroupFile01"
                     aria-describedby="inputGroupFileAddon01"
-                    @change="img=true"
+                    @change="img=true;uploadImg()"
                   >
                   <label class="custom-file-label" for="inputGroupFile01">Subir imagen</label>
                   <label for v-show="img">Avatar cargado</label>
@@ -69,13 +70,13 @@
         </el-form-item>
         <el-form-item label="Cedula" prop="dni">
           <el-input
-            v-model="form.Dni"
+            v-model="form.dni"
             :disabled="edit"
             placeholder="Ej: 402-324...."
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="Correo" :disabled="edit" prop="email">
+        <el-form-item v-if="edit" label="Correo" :disabled="edit" prop="email">
           <el-input
             v-model="form.email"
             :disabled="edit"
@@ -88,25 +89,36 @@
       </el-form>
       <span slot="footer" class="dialog-footer" v-show="!edit">
         <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="submitClient()">Confirm</el-button>
+        <el-button type="primary" @click="update()">Confirm</el-button>
       </span>
     </el-dialog>
   </span>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { EventBus } from "@/service/event-bus.js";
+import { API_IMAGES } from "@/service/UtilService";
 export default {
+  props: ["id"],
   data: () => {
     return {
       form: {
+        id: "",
         name: "",
         lastName: "",
         address: "",
         employeecode: "",
         phoneNumber: "",
         avatar: "1",
-        dni: ""
+        dni: "",
+        emai: ""
       },
+      imgmodel: {
+        id: null,
+        file: ""
+      },
+      loading: true,
       img: false,
       rules: {
         name: [
@@ -168,12 +180,70 @@ export default {
       dialogFormVisible: false,
       edit: true
     };
+  },
+  methods: {
+    ...mapState({
+      service: state => state.services.employeeService
+    }),
+    getById() {
+      this.loading = true;
+      this.service()
+        .getById(this.id)
+        .then(r => {
+          this.form.name = r.data.name;
+          this.form.lastName = r.data.lastName;
+          this.form.address = r.data.address;
+          this.form.employeecode = r.data.employeeCode;
+          this.form.phoneNumber = r.data.phoneNumber;
+          this.form.avatar = r.data.avatar;
+          this.form.email = r.data.email;
+          this.form.dni = r.data.dni;
+        })
+        .catch(e => console.log(e))
+        .finally(() => (this.loading = false));
+    },
+    update() {
+      this.form.id = this.id;
+      this.service()
+        .update(this.form)
+        .then(r => {
+          this.$message({
+            message: "Actualizado con exito",
+            type: "success"
+          });
+          this.dialogFormVisible = false;
+          EventBus.$emit("submitEmployee");
+        })
+        .catch(e => {
+          this.$message.error(e.response.data);
+        });
+    },
+    uploadImg() {
+      let formData = new FormData();
+      formData.append("file", this.$refs.file.files[0]);
+      formData.append("id", this.id);
+      this.service()
+        .uploadImg(formData)
+        .then(r => this.getById())
+        .catch(e => console.log(e));
+    }
+  },
+  computed: {
+    IMG() {
+      return API_IMAGES;
+    }
   }
 };
 </script>
 
 <style>
 .card-img {
-  width: 300px;
+  width: 400px;
+}
+.img-cent {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 </style>

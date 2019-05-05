@@ -7,6 +7,7 @@
     <div>
       <el-col class="tab" :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
+          v-loading="loading"
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
           id="table-client"
@@ -14,6 +15,7 @@
         >
           <el-table-column label="Codigo" prop="clientCode"></el-table-column>
           <el-table-column label="Nombre" prop="name"></el-table-column>
+          <el-table-column label="Apellidos" prop="lastName"></el-table-column>
           <el-table-column label="Fecha de creacion" prop="createdAt"></el-table-column>
           <el-table-column label="Dirreccion" prop="address"></el-table-column>
           <el-table-column align="right">
@@ -21,12 +23,8 @@
               <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
             </template>
             <template slot-scope="scope">
-              <detail></detail>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row);remove()"
-              >Eliminar</el-button>
+              <detail :id="scope.row.id"></detail>
+              <el-button size="mini" type="danger" @click="remove(scope.row.id )">Eliminar</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -38,6 +36,8 @@
 <script>
 import add from "./Add";
 import detail from "./Detail";
+import { mapState } from "vuex";
+import { EventBus } from "@/service/event-bus.js";
 export default {
   components: {
     add,
@@ -45,41 +45,60 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          clientCode: "0101",
-          createdAt: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        }
-      ],
-      search: ""
+      tableData: [],
+      search: "",
+      loading: true
     };
   },
+  mounted() {
+    this.getAll();
+    EventBus.$on("submitClient", () => {
+      this.getAll();
+    });
+  },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    ...mapState({
+      services: state => state.services.clientService
+    }),
+
+    getAll() {
+      this.loading = true;
+      this.services()
+        .getAll()
+        .then(r => {
+          this.tableData = r.data;
+          this.loading = false;
+        })
+        .catch(e => console.log(e));
     },
-    handleDelete(index, row) {
-      console.log(index, row);
-    },
-    remove() {
+    remove(id) {
+      this.loading = true;
       this.$confirm("Seguro que desea eliminarlo?", "Eliminar", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancelar",
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "Cliente eliminado"
-          });
+          this.services()
+            .remove(id)
+            .then(r => {
+              this.$message({
+                type: "success",
+                message: "Cliente eliminado"
+              });
+              this.loading = false;
+              this.getAll();
+            })
+            .catch(e => {
+              this.loading = false;
+            });
         })
         .catch(() => {
           this.$message({
             type: "info",
             message: "Operacion cancelada"
           });
+          this.loading = false;
         });
     }
   }

@@ -1,10 +1,5 @@
 <template>
-  <el-menu
-    :default-active="activeIndex"
-    class="el-menu-demo"
-    mode="horizontal"
-    @select="handleSelect"
-  >
+  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
     <el-menu-item index="1">
       <router-link tag="a" :to="{path:'/home'}">Inicio</router-link>
     </el-menu-item>
@@ -34,17 +29,18 @@
       </el-menu-item>
       <el-menu-item index="2-4">Reportes</el-menu-item>
       <el-menu-item index="2-5">
-        <router-link tag="p" :to="{path:'/login'}">Salir</router-link>
+        <p @click="exit()">Salir</p>
       </el-menu-item>
     </el-submenu>
     <el-menu-item index="8">
-      <span>Admin</span>
+      <span>{{userName}}</span>
     </el-menu-item>
   </el-menu>
 </template>
 
 <script>
 import alert from "./alert";
+import { mapState, mapMutations } from "vuex";
 export default {
   components: {
     alert
@@ -55,13 +51,23 @@ export default {
     activeIndex2: "1"
   }),
   methods: {
-    handleSelect(key, keyPath) {}
+    ...mapMutations(["closeLogin"]),
+    exit() {
+      localStorage.clear();
+      this.closeLogin();
+      this.$router.push("/login");
+    }
+  },
+  computed: {
+    userName() {
+      return JSON.parse(localStorage.getItem("user")).user;
+    }
   }
 };
 </script>
 
 <style Scoped>
 .alert-to {
-  margin-left: 400px;
+  margin-left: 300px;
 }
 </style>

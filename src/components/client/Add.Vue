@@ -2,7 +2,7 @@
   <div>
     <el-button icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">Nuevo</el-button>
     <el-dialog class title="Datos del Nuevo Cliente" :visible.sync="dialogFormVisible">
-      <el-form class="animated fadeIn" :model="form" :rules="rules" ref="form">
+      <el-form v-loading="loading" class="animated fadeIn" :model="form" :rules="rules" ref="form">
         <el-form-item label="Codigo" :label-width="formLabelWidth">
           <el-input v-model="form.clientCode" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
@@ -32,10 +32,13 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+ import { EventBus } from "@/service/event-bus.js";
 export default {
   data() {
     return {
       dialogFormVisible: false,
+      loading:false,
       form: {
         name: "",
         lastName: "",
@@ -78,10 +81,30 @@ export default {
     };
   },
   methods: {
+    ...mapState({
+      services: state => state.services.clientService
+    }),
     submitClient() {
+      this.loading =true
       this.$refs["form"].validate(valid => {
         if (valid) {
-          alert("submit!");
+          this.services()
+            .add(this.form)
+            .then(r => {
+              this.$message({
+                message: "Cliente agregado con exito",
+                type: "success"
+              });
+              this.dialogFormVisible = false;
+              this.loading = false
+              EventBus.$emit('submitClient')
+            })
+            .catch(e => {
+              this.$message({
+                message: "lo sentimos! , intente de nuevo",
+                type: "error"
+              });
+            });
         } else {
           console.log("error submit!!");
           return false;

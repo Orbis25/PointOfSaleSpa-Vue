@@ -3,10 +3,10 @@ export default class AuthService {
   apiUrl;
   constructor(axios, apiUrl) {
     this.axios = axios;
-    this.apiUrl = apiUrl;
+    this.apiUrl = `${apiUrl}/auth`;
   }
 
-  login() {
-    return this.axios.post(`${this.apiUrl}/login`);
+  login(model) {
+    return this.axios.post(`${this.apiUrl}/login`, model );
   }
 }

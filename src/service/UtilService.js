@@ -1,4 +1,1 @@
-import Pdf from "jspdf";
-import "jspdf-autotable";
-
-export default class UtilService {}
+export const API_IMAGES = "http://localhost:61683/images/";
