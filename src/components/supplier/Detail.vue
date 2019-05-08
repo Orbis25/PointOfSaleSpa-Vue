@@ -1,7 +1,7 @@
 <template>
   <span>
-    <el-button type="primary" size="mini" @click="dialogFormVisible = true">Ver</el-button>
-    <el-dialog :visible.sync="dialogFormVisible">
+    <el-button type="primary" size="mini" @click="dialogFormVisible = true; getById()">Ver</el-button>
+    <el-dialog v-loading="loading" :visible.sync="dialogFormVisible">
       <el-button type="primary" @click="edit = !edit">
         Editar
         <i class="el-icon-edit"></i>
@@ -34,31 +34,27 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="Dirreccion" prop="address">
-          <el-input
-            :disabled="edit"
-            type="textarea"
-            placeholder="Ej: calle bla bla bla......."
-            v-model="form.address"
-          ></el-input>
-        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer" v-show="!edit">
         <el-button @click="dialogFormVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="submitClient()">Confirmar</el-button>
+        <el-button type="primary" @click="update()">Confirmar</el-button>
       </span>
     </el-dialog>
   </span>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { EventBus } from "@/service/event-bus.js";
 export default {
+  props: ["id"],
   data: () => {
     return {
+      loading: true,
       form: {
+        id: "",
         name: "",
         companyName: "",
-        address: "",
         supplierCode: "",
         phoneNumber: ""
       },
@@ -77,13 +73,6 @@ export default {
             trigger: "blur"
           }
         ],
-        address: [
-          {
-            required: true,
-            message: "Porfavor ingresar la dirreccion",
-            trigger: "blur"
-          }
-        ],
         phoneNumber: [
           {
             required: true,
@@ -96,6 +85,50 @@ export default {
       dialogFormVisible: false,
       edit: true
     };
+  },
+  methods: {
+    ...mapState({
+      service: state => state.services.supplierService
+    }),
+    getById() {
+      this.loading = true;
+      this.service()
+        .getById(this.id)
+        .then(r => {
+          this.form.name = r.data.name;
+          this.form.companyName = r.data.companyName;
+          this.form.supplierCode = r.data.supplierCode;
+          this.form.phoneNumber = r.data.phoneNumber;
+        })
+        .catch(e =>
+          this.$message({
+            message: e.response.data,
+            type: "error"
+          })
+        )
+        .finally(() => (this.loading = false));
+    },
+    update() {
+      this.form.id = this.id;
+      this.loading = true;
+      this.service()
+        .update(this.form)
+        .then(r => {
+          this.$message({
+            message: "suplidor actualizado",
+            type: "success"
+          });
+          this.dialogFormVisible = false;
+          EventBus.$emit("submitSupplier");
+        })
+        .catch(e => {
+          this.$message({
+            message: e.response.data,
+            type: "error"
+          });
+        })
+        .finally(() => (this.loading = false));
+    }
   }
 };
 </script>

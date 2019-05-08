@@ -15,23 +15,18 @@
         <el-form-item label="Numero" :label-width="formLabelWidth" prop="phoneNumber">
           <el-input v-model="form.phoneNumber" placeholder="Ej: 80963244963" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="Dirreccion" prop="address" :label-width="formLabelWidth">
-          <el-input
-            type="textarea"
-            placeholder="Ej: calle bla bla bla......."
-            v-model="form.address"
-          ></el-input>
-        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="submitClient()">Confirm</el-button>
+        <el-button type="primary" @click="submitSupplier()">Confirm</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { EventBus } from "@/service/event-bus.js";
 export default {
   data() {
     return {
@@ -39,7 +34,6 @@ export default {
       form: {
         name: "",
         companyName: "",
-        address: "",
         supplierCode: `SP-${Math.floor(Math.random() * (9999 - 1000 + 1)) +
           1000}`,
         phoneNumber: ""
@@ -59,13 +53,6 @@ export default {
             trigger: "blur"
           }
         ],
-        address: [
-          {
-            required: true,
-            message: "Porfavor ingresar la dirreccion",
-            trigger: "blur"
-          }
-        ],
         phoneNumber: [
           {
             required: true,
@@ -79,12 +66,29 @@ export default {
     };
   },
   methods: {
-    submitClient() {
+    ...mapState({
+      service: state => state.services.supplierService
+    }),
+    submitSupplier() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          alert("submit!");
+          this.service()
+            .add(this.form)
+            .then(r => {
+              this.$message({
+                message: "Suplidor agregado",
+                type: "success"
+              });
+              EventBus.$emit('submitSupplier')
+              this.dialogFormVisible = false
+            })
+            .catch(e => {
+              this.$message({
+                message: e.response.data,
+                type: "error"
+              });
+            });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

@@ -1,7 +1,15 @@
 <template>
   <div>
-    <el-button icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">Nuevo</el-button>
-    <el-dialog class title="Datos del Nuevo Producto" :visible.sync="dialogFormVisible">
+    <el-button
+      icon="el-icon-circle-plus-outline"
+      @click="dialogFormVisible = true; getAllSuppliers()"
+    >Nuevo</el-button>
+    <el-dialog
+      v-loading="loading"
+      class
+      title="Datos del Nuevo Producto"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form class="animated fadeIn" :model="form" :rules="rules" ref="form">
         <el-form-item label="Codigo" :label-width="formLabelWidth">
           <el-input v-model="form.productCode" autocomplete="off" :disabled="true"></el-input>
@@ -21,9 +29,9 @@
         <el-form-item label="Cantidad" :label-width="formLabelWidth" prop="quantity">
           <el-input-number v-model="form.quantity" :min="1"></el-input-number>
         </el-form-item>
-        <el-form-item label="Suplidor" :label-width="formLabelWidth" prop="quantity">
+        <el-form-item label="Suplidor" :label-width="formLabelWidth" prop="supplierId">
           <el-select v-model="form.supplierId" clearable placeholder="Select">
-            <el-option v-for="item in suppliers" :key="item.Id" :label="item.name" :value="item.Id"></el-option>
+            <el-option v-for="item in suppliers" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Precio" :label-width="formLabelWidth" prop="price">
@@ -31,14 +39,16 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="submitClient()">Confirm</el-button>
+        <el-button @click="dialogFormVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="submitProduct()">Confirmar</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { EventBus } from "@/service/event-bus.js";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -74,7 +84,6 @@ export default {
         type: [
           {
             required: true,
-            pattern: /\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/,
             message: "Porfavor ingrese un tipo",
             trigger: "blur"
           }
@@ -110,16 +119,48 @@ export default {
         ]
       },
       formLabelWidth: "120px",
-      suppliers: []
+      suppliers: [],
+      loading: true
     };
   },
+  mounted() {
+    // this.getAllSuppliers()
+  },
   methods: {
-    submitClient() {
+    ...mapState({
+      productService: state => state.services.productService
+    }),
+    ...mapState({
+      supplierService: state => state.services.supplierService
+    }),
+
+    getAllSuppliers() {
+      this.supplierService()
+        .getAll()
+        .then(r => (this.suppliers = r.data));
+    },
+    submitProduct() {
+      this.loading = true;
       this.$refs["form"].validate(valid => {
         if (valid) {
-          alert("submit!");
+          this.productService()
+            .add(this.form)
+            .then(r => {
+              this.$message({
+                message: "Producto agregado",
+                type: "success"
+              });
+              this.dialogFormVisible = false;
+              EventBus.$emit("submitProduct");
+            })
+            .catch(e => {
+              this.$message({
+                message: e.response.data,
+                type: "error"
+              });
+            })
+            .finally(() => (this.loading = false));
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

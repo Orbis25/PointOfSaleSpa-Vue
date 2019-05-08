@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-button type="primary" size="mini" @click="dialogFormVisible = true">Ver</el-button>
+    <el-button type="primary" size="mini" @click="dialogFormVisible = true; getById()">Ver</el-button>
     <el-dialog :visible.sync="dialogFormVisible">
       <el-button type="primary" class="mb-3" @click="edit = !edit">
         Editar
@@ -11,16 +11,17 @@
           <div class="col">
             <el-card shadow="hover" class="card-img">
               <div class="text-center">
-                <img src="@/assets/logo.png" alt>
+                <img :src="`${IMG}${form.avatar}`" height="300px" alt>
               </div>
               <div v-show="!edit" class="text-center input-group mb-3">
                 <div class="custom-file">
                   <input
                     type="file"
+                    ref="file"
                     class="custom-file-input"
                     id="inputGroupFile01"
                     aria-describedby="inputGroupFileAddon01"
-                    @change="img=true"
+                    @change="img=true;uploadImg()"
                   >
                   <label class="custom-file-label" for="inputGroupFile01">Subir imagen</label>
                   <label for v-show="img">Avatar cargado</label>
@@ -70,34 +71,32 @@
           <el-input-number class="qyt-sp" v-model="form.quantity" :disabled="edit" :min="1"></el-input-number>
         </el-form-item>
         <el-form-item label="Suplidor" prop="quantity">
-          <el-select
-            v-model="form.supplierId"
-            class="qyt-sp"
-            :disabled="edit"
-            clearable
-            placeholder="Select"
-          >
-            <el-option v-for="item in suppliers" :key="item.Id" :label="item.name" :value="item.Id"></el-option>
-          </el-select>
+          <el-input v-model="form.supplierName" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="Precio" prop="price">
           <el-input v-model="form.price" :disabled="edit" type="text" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer" v-show="!edit">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="submitClient()">Confirm</el-button>
+        <el-button @click="dialogFormVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="update()">Confirmar</el-button>
       </span>
     </el-dialog>
   </span>
 </template>
 
 <script>
+import { EventBus } from "@/service/event-bus.js";
+import { mapState } from "vuex";
+import { API_IMAGES } from "@/service/UtilService";
+
 export default {
+  props: ["id"],
   data: () => {
     return {
       dialogFormVisible: false,
       form: {
+        id: "",
         name: "",
         model: "",
         address: "",
@@ -107,7 +106,7 @@ export default {
         brand: "",
         quantity: "",
         price: "",
-        supplierId: ""
+        supplierName: ""
       },
       rules: {
         name: [
@@ -163,8 +162,73 @@ export default {
         ]
       },
       suppliers: [],
-      edit: true
+      edit: true,
+      img: false,
+      imgmodel: {
+        id: null,
+        file: ""
+      }
     };
+  },
+  methods: {
+    ...mapState({
+      service: state => state.services.productService
+    }),
+    getById() {
+      this.service()
+        .getByid(this.id)
+        .then(r => {
+          this.form.name = r.data.name;
+          this.form.model = r.data.model;
+          this.form.productCode = r.data.productCode;
+          this.form.type = r.data.type;
+          this.form.brand = r.data.brand;
+          this.form.quantity = r.data.quantity;
+          this.form.price = r.data.price;
+          this.form.supplierName = r.data.supplier.name;
+          this.form.avatar = r.data.avatar;
+          console.log(r.data.avatar);
+        })
+        .catch(e => {
+          this.$message({
+            message: e.response.data,
+            type: "error"
+          });
+        });
+    },
+    uploadImg() {
+      let formData = new FormData();
+      formData.append("file", this.$refs.file.files[0]);
+      formData.append("id", this.id);
+      this.service()
+        .uploadImg(formData)
+        .then(r => this.getById())
+        .catch(e => console.log(e));
+    },
+    update() {
+      this.form.id = this.id;
+      this.service()
+        .update(this.form)
+        .then(r => {
+          this.$message({
+            message: "Producto actualizado",
+            type: "success"
+          });
+          this.dialogFormVisible = false;
+          EventBus.$emit("submitProduct");
+        })
+        .catch(e => {
+          this.$message({
+            message: e.response.data,
+            type: "error"
+          });
+        });
+    }
+  },
+  computed: {
+    IMG() {
+      return API_IMAGES;
+    }
   }
 };
 </script>

@@ -7,26 +7,26 @@
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
+          v-loading="loading"
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
           height="600"
         >
-          <el-table-column label="Codigo" prop="date"></el-table-column>
+          <el-table-column label="Codigo" prop="supplierCode"></el-table-column>
           <el-table-column label="Nombre" prop="name"></el-table-column>
-          <el-table-column label="Fecha de creacion" prop="name"></el-table-column>
-          <el-table-column label="Compañia" prop="name"></el-table-column>
+          <el-table-column label="Fecha de creacion" prop="createdAt"></el-table-column>
+          <el-table-column label="Compañia" prop="companyName"></el-table-column>
 
           <el-table-column align="right">
             <template slot="header" slot-scope="scope">
               <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
             </template>
             <template slot-scope="scope">
-              <detail></detail>
-              <!-- <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">Ver</el-button> -->
+              <detail :id="scope.row.id"></detail>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row); remove()"
+                @click="remove(scope.row.id)"
               >Eliminar</el-button>
             </template>
           </el-table-column>
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { EventBus } from "@/service/event-bus.js";
 import add from "./add";
 import detail from "./detail";
 export default {
@@ -46,59 +48,49 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-04",
-          name: "John",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-01",
-          name: "Morgan",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-03",
-          name: "Jessy",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-04",
-          name: "John",
-          address: "No. 189, Grove St, Los Angeles"
-        }
-      ],
-      search: ""
+      tableData: [],
+      search: "",
+      loading: true
     };
   },
+  mounted() {
+    this.getAll();
+    EventBus.$on("submitSupplier", () => this.getAll());
+  },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    ...mapState({
+      services: state => state.services.supplierService
+    }),
+    getAll() {
+      this.loading = true;
+      this.services()
+        .getAll()
+        .then(r => (this.tableData = r.data))
+        .catch(e => console.log(e))
+        .finally(() => (this.loading = false));
     },
-    handleDelete(index, row) {
-      console.log(index, row);
-    },
-    remove() {
+    remove(id) {
       this.$confirm("Seguro que desea eliminarlo?", "Eliminar", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancelar",
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "Suplidor eliminado"
-          });
+          this.services()
+            .remove(id)
+            .then(r => {
+              this.$message({
+                type: "success",
+                message: "Suplidor eliminado"
+              });
+              this.getAll()
+            })
+            .catch(r => {
+              this.$message({
+                type: "error",
+                message: r.response.data
+              });
+            });
         })
         .catch(() => {
           this.$message({

@@ -12,29 +12,25 @@
           </div>
         </div>
       </el-col>
-      <div >
+      <div>
         <el-col class="tab" :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
           <el-table
+            v-loading="loading"
             :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%"
             height="600"
           >
-            <el-table-column label="Codigo" prop="date"></el-table-column>
+            <el-table-column label="Codigo" prop="productCode"></el-table-column>
             <el-table-column label="Nombre" prop="name"></el-table-column>
-            <el-table-column label="Cantidad" prop="name"></el-table-column>
-            <el-table-column label="Precio" prop="name"></el-table-column>
+            <el-table-column label="Cantidad" prop="quantity"></el-table-column>
+            <el-table-column label="Precio" prop="price"></el-table-column>
             <el-table-column align="right">
               <template slot="header" slot-scope="scope">
                 <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
               </template>
               <template slot-scope="scope">
-                <detail></detail>
-                <!-- <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">Ver</el-button> -->
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row);remove()"
-                >Eliminar</el-button>
+                <detail :id="scope.row.id"></detail>
+                <el-button size="mini" type="danger" @click="remove(scope.row.id)">Eliminar</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -47,6 +43,8 @@
 import add from "./Add";
 import spent from "./Spent";
 import detail from "./detail";
+import { EventBus } from "@/service/event-bus.js";
+import { mapState } from "vuex";
 export default {
   components: {
     add,
@@ -55,74 +53,49 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-04",
-          name: "John",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-01",
-          name: "Morgan",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-03",
-          name: "Jessy",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-04",
-          name: "John",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-01",
-          name: "Morgan",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-03",
-          name: "Jessy",
-          address: "No. 189, Grove St, Los Angeles"
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        }
-      ],
+      tableData: [],
+      loading: true,
       search: ""
     };
   },
+  mounted() {
+    this.getAll();
+    EventBus.$on("submitProduct", () => this.getAll());
+  },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    ...mapState({
+      service: state => state.services.productService
+    }),
+    getAll() {
+      this.loading = true;
+      this.service()
+        .getAll()
+        .then(r => (this.tableData = r.data))
+        .catch(e => console.log(r.response.data))
+        .finally(() => (this.loading = false));
     },
-    handleDelete(index, row) {
-      console.log(index, row);
-    },
-    remove() {
+    remove(id) {
       this.$confirm("Seguro que desea eliminarlo?", "Eliminar", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancelar",
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "Producto eliminado"
-          });
+          this.service()
+            .remove(id)
+            .then(r => {
+              this.$message({
+                type: "success",
+                message: "Producto eliminado"
+              });
+              this.getAll();
+            })
+            .catch(e => {
+              this.$message({
+                type: "error",
+                message: e.response.data
+              });
+            });
         })
         .catch(() => {
           this.$message({
