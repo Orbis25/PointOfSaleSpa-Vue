@@ -18,13 +18,13 @@
         <div class="col-6">
           <div style="margin: 20px;"></div>
           <el-form-item label="Codigo">
-            <el-input v-model="formLabelAlign.employeeId" disabled></el-input>
+            <el-input v-model="formLabelAlign.code" disabled></el-input>
           </el-form-item>
           <el-form-item label="Total">
             <el-input v-model="formLabelAlign.total" disabled></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">imprimir</el-button>
+            <el-button type="primary" @click="exportToPdf()">imprimir</el-button>
             <el-button type="primary" @click="dialogFormVisible = true">Enviar por correo</el-button>
           </el-form-item>
         </div>
@@ -32,30 +32,25 @@
     </el-form>
     <div class="row">
       <div class="col">
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column label="Nombre" width="200">
+        <el-table id="basic-table" :data="tableData" style="width: 100%">
+          <el-table-column label="Nombre" width="400">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Marca" width="300">
+          <el-table-column label="Marca" width="400">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.brand }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Cantidad" width="300">
+          <el-table-column label="Cantidad" width="250">
             <template slot-scope="scope">
               <el-tag size="medium">{{ scope.row.quantity }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="Eliminar">
+          <el-table-column label="precio" width="200">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="danger"
-                icon="el-icon-delete"
-                @click="handleDelete(scope.$index, scope.row)"
-              ></el-button>
+              <el-tag size="medium">{{ scope.row.price }}</el-tag>
             </template>
           </el-table-column>
         </el-table>
@@ -78,15 +73,20 @@
 <script>
 import SelectClient from "./SelectClient";
 import AddProduct from "./AddProduct";
+import { mapState } from "vuex";
+import jspdf from "jspdf";
+import "jspdf-autotable";
 export default {
   components: {
     SelectClient,
     AddProduct
   },
+  props: ["id"],
   data() {
     return {
       labelPosition: "left",
       formLabelAlign: {
+        code: "",
         date: "",
         employeeId: "",
         client: "",
@@ -110,22 +110,29 @@ export default {
           }
         ]
       },
-      tableData: [
-        {
-          name: "black goku",
-          brand: "toe",
-          quantity: 2
-        }
-      ],
+      tableData: [],
       dialogFormVisible: false
     };
   },
+  mounted() {
+    this.getById();
+  },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
-      console.log(index, row);
+    ...mapState({
+      service: state => state.services.saleService
+    }),
+    getById() {
+      this.service()
+        .getById(this.id)
+        .then(r => {
+          this.formLabelAlign.date = r.data.sale.createdAt;
+          this.formLabelAlign.client = r.data.sale.fullNameClient;
+          this.formLabelAlign.total = r.data.sale.total;
+          this.formLabelAlign.employeeId = r.data.sale.fullNameEmployee;
+          this.formLabelAlign.code = r.data.sale.saleCode;
+          this.tableData = r.data.products;
+        })
+        .catch(e => console.log(e));
     },
     submitForm() {
       this.form.validate(valid => {
@@ -136,6 +143,51 @@ export default {
           return false;
         }
       });
+    },
+    exportToPdf() {
+      let body = this.tableData.map(e => {
+        return {
+          Producto: "Producto => " + e.name,
+          Marca: "Marca => " + e.brand,
+          Cantidad: "Cantidad => " + e.quantity,
+          Precio: "Precio => " + e.price
+        };
+      });
+
+      let doc = new jspdf();
+
+      doc.setFont("helvetica");
+      doc.setFontType("bold");
+      doc.text(75, 15, "Detalle de venta");
+
+      doc.setFont("helvetica");
+      doc.setFontType("bold");
+      doc.text(150, 40, "Fecha :" + this.formLabelAlign.date);
+
+      doc.setFont("helvetica");
+      doc.setFontType("bold");
+      doc.text(15, 40, "Cliente :" + this.formLabelAlign.client);
+
+      doc.setFont("helvetica");
+      doc.setFontType("bold");
+      doc.text(15, 50, "Vendedor :" + this.formLabelAlign.employeeId);
+
+      doc.setFont("helvetica");
+      doc.setFontType("bold");
+      doc.text(150, 50, "Total :" + this.formLabelAlign.total);
+
+      doc.setFont("helvetica");
+      doc.setFontType("bold");
+      doc.text(15, 60, "Codigo :" + this.formLabelAlign.code);
+
+      doc.setLineWidth(1);
+      doc.line(0, 70, 500, 70);
+
+      doc.autoTable({
+        margin: {top: 80},
+        body
+      });
+      doc.save("table.pdf");
     }
   }
 };

@@ -68,7 +68,8 @@ export default new Router({
       path: "/sale/:id/detail",
       name: "detail",
       component: Detail,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      props:true
     },
     {
       path: "/login",

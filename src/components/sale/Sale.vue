@@ -3,25 +3,26 @@
     <el-row :gutter="24">
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <h1 class="mb-4 ml-4 animated fadeIn">Ventas</h1>
-        <router-link tag="el-button" :to="{path:'/sale/add'}" >Nueva</router-link>
+        <router-link tag="el-button" :to="{path:'/sale/add'}">Nueva</router-link>
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
+
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
-            height="600"
+          height="600"
         >
-          <el-table-column label="Codigo" prop="date"></el-table-column>
-          <el-table-column label="Nombre" prop="name"></el-table-column>
-          <el-table-column label="Fecha de creacion" prop="name"></el-table-column>
-          <el-table-column label="Cedula" prop="name"></el-table-column>
+          <el-table-column label="Codigo" prop="saleCode"></el-table-column>
+          <el-table-column label="Nombre" prop="client.name"></el-table-column>
+          <el-table-column label="Fecha de creacion" prop="createdAt"></el-table-column>
+          <el-table-column label="Numero" prop="client.phoneNumber"></el-table-column>
           <el-table-column align="right">
             <template slot="header" slot-scope="scope">
               <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>
             </template>
             <template slot-scope="scope">
-              <router-link :to="{path:`sale/${scope.row.id}/detail`}"  >
-              <el-button size="mini" type="primary">ver</el-button>
+              <router-link :to="{path:`sale/${scope.row.id}/detail`}">
+                <el-button size="mini" type="primary">ver</el-button>
               </router-link>
               <el-button
                 size="mini"
@@ -37,26 +38,29 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles"
-        }
-      ],
+      tableData: [],
       search: ""
     };
   },
+  mounted() {
+    this.getAll();
+  },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    ...mapState({
+      service: state => state.services.saleService
+    }),
+    getAll() {
+      this.service()
+        .getAll()
+        .then(r => (this.tableData = r.data))
+        .catch(e => console.log(e));
     },
-    handleDelete(index, row) {
-      console.log(index, row);
-    },
+    
     remove() {
       this.$confirm("Seguro que desea eliminarla?", "Eliminar", {
         confirmButtonText: "OK",

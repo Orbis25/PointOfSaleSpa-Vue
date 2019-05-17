@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" @click="dialogTableVisible = true">Agregar Producto</el-button>
+    <el-button type="primary" @click="dialogTableVisible = true; getAll()">Agregar Producto</el-button>
 
     <el-dialog title="Productos" :visible.sync="dialogTableVisible">
       <el-table
@@ -11,16 +11,7 @@
         <el-table-column label="Nombre" prop="name"></el-table-column>
         <el-table-column label="Cantidad">
           <template slot-scope="scope">
-            <input
-              type="number"
-              class="form-control"
-              min="1"
-              onkeydown="return false;"
-              :max="scope.row.num"
-              :value="scope.row.num"
-              name
-              id="qyt"
-            >
+            {{scope.row.quantity}}
           </template>
         </el-table-column>
         <el-table-column align="right">
@@ -28,7 +19,18 @@
             <el-input v-model="search" size="mini" placeholder="Type to search"/>
           </template>
           <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="handleDelete(scope.$index, scope.row)">
+            <el-button
+              size="mini"
+              type="success"
+              @click="add(
+              {
+              name:scope.row.name,
+              quantity:scope.row.quantity,
+              id : scope.row.id , 
+              quantity : scope.row.quantity}
+              
+              )"
+            >
               <i class="el-icon-circle-plus"></i>
             </el-button>
           </template>
@@ -38,26 +40,32 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+import { EventBus } from "@/service/event-bus.js";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          name: "John Smith",
-          num: 10
-        },
-        {
-          name: "John Smith",
-          num: 8
-        }
-      ],
+      tableData: [],
       search: "",
       num: 1,
       dialogTableVisible: false,
       dialogFormVisible: false
     };
+  },
+  methods: {
+    ...mapState({
+      service: state => state.services.productService
+    }),
+    getAll() {
+      this.service()
+        .getAll()
+        .then(r => (this.tableData = r.data))
+        .catch(e => console.log(r.response.data))
+        .finally(() => (this.loading = false));
+    },
+    add(product) {
+      EventBus.$emit("add", product);
+    }
   }
 };
-
-let inp = document.getElementById("qyt");
 </script>

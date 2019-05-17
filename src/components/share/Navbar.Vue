@@ -21,7 +21,7 @@
 
     <el-submenu class="acctions" index="7">
       <template slot="title">Acciones</template>
-      <el-menu-item index="2-1">
+      <el-menu-item v-show="role != 1" index="2-1">
         <router-link tag="p" :to="{path:'/user/id'}">Usuario</router-link>
       </el-menu-item>
       <el-menu-item index="2-2">
@@ -61,6 +61,10 @@ export default {
   computed: {
     userName() {
       return JSON.parse(localStorage.getItem("user")).user;
+    },
+    role(){
+      let user = JSON.parse(localStorage.getItem("user"));
+      return user.userData.role
     }
   }
 };

@@ -30,6 +30,10 @@ export default class ProductService {
     return this.axios.delete(`${this.apiUrl}/${id}`);
   }
 
+  spents(){
+    return this.axios.get(`${this.apiUrl}/spents`);
+  }
+
   uploadImg(model) {
     return this.axios.post(`${this.apiUrl}/upload/avatar`, model, {
       headers: {

@@ -5,6 +5,7 @@ import EmployeeService from "../service/EmployeeService";
 import SupplierService from "../service/SupplierService";
 import ProductService from "../service/ProductService";
 import HomeService from "../service/HomeService";
+import SaleService from "../service/SaleService";
 
 let apiUrl = "http://localhost:61683/api";
 Axios.defaults.headers.common.Accept = "application/json";
@@ -15,5 +16,6 @@ export default {
   employeeService: new EmployeeService(Axios, apiUrl),
   supplierService: new SupplierService(Axios, apiUrl),
   productService: new ProductService(Axios, apiUrl),
-  homeService: new HomeService(Axios, apiUrl)
+  homeService: new HomeService(Axios, apiUrl),
+  saleService: new SaleService(Axios, apiUrl)
 };
