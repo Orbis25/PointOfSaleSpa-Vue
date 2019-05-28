@@ -7,7 +7,6 @@
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
-
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
           height="600"
@@ -39,7 +38,7 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { EventBus } from "@/service/event-bus.js";
 export default {
   data() {
     return {
@@ -49,6 +48,9 @@ export default {
   },
   mounted() {
     this.getAll();
+    EventBus.$on("add", () => {
+      this.getAll();
+    })
   },
   methods: {
     ...mapState({
@@ -60,7 +62,7 @@ export default {
         .then(r => (this.tableData = r.data))
         .catch(e => console.log(e));
     },
-    
+
     remove() {
       this.$confirm("Seguro que desea eliminarla?", "Eliminar", {
         confirmButtonText: "OK",

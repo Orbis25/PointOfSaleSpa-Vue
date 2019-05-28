@@ -14,6 +14,11 @@
             {{scope.row.quantity}}
           </template>
         </el-table-column>
+        <el-table-column label="Marca" >
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.brand }}</span>
+            </template>
+          </el-table-column>
         <el-table-column align="right">
           <template slot="header" slot-scope="scope">
             <el-input v-model="search" size="mini" placeholder="Type to search"/>
@@ -27,8 +32,9 @@
               name:scope.row.name,
               quantity:scope.row.quantity,
               id : scope.row.id , 
-              quantity : scope.row.quantity}
-              
+              quantity : scope.row.quantity,
+              brand : scope.row.brand,
+              price : scope.row.price}
               )"
             >
               <i class="el-icon-circle-plus"></i>
@@ -59,7 +65,7 @@ export default {
     getAll() {
       this.service()
         .getAll()
-        .then(r => (this.tableData = r.data))
+        .then(r => (this.tableData = r.data.filter(x => x.quantity > 0)))
         .catch(e => console.log(r.response.data))
         .finally(() => (this.loading = false));
     },
