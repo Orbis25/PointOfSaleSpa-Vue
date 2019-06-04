@@ -3,7 +3,7 @@
     <div class="col-4">
       <el-card shadow="hover" class="animated rollIn">
         <div class="text-center">
-          <img src="@/assets/logo.png" alt>
+          <img class="img-cent" height="250px" :src="IMG+imguser" alt>
         </div>
         <i class="el-icon-edit edit-img" @click="centerDialogVisible = true" v-show="!edit"></i>
       </el-card>
@@ -11,13 +11,8 @@
     </div>
     <div class="col-6">
       <el-form class="animated fadeIn" :model="form" ref="form">
-        <el-button type="primary" class="btn-edit" @click="edit = !edit">
-          Editar
-          <i class="el-icon-edit"></i>
-        </el-button>
-
         <el-form-item label="Codigo">
-          <el-input v-model="form.clientCode" autocomplete="off" :disabled="true"></el-input>
+          <el-input v-model="form.employeCode" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="Nombre" prop="name">
           <el-input
@@ -47,17 +42,17 @@
     </div>
     <!-- change the password -->
     <el-dialog title="Nueva contraseña" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
+      <el-form :model="formpass">
         <el-form-item label="Contraseña">
-          <el-input v-model="form.pass" autocomplete="off"></el-input>
+          <el-input v-model="formpass.pass" type="password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="Confirmar">
-          <el-input v-model="form.pass" autocomplete="off"></el-input>
+          <el-input v-model="formpass.pass2" type="password" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+        <el-button @click="dialogFormVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false;change()">Confirmar</el-button>
       </span>
     </el-dialog>
     <!-- uploads img -->
@@ -86,14 +81,23 @@
 </template>
 
 <script>
+import { API_IMAGES } from "@/service/UtilService";
+import { mapState } from "vuex";
 export default {
+  props: ["id"],
   data() {
     return {
+      imguser: "",
+      formpass: {
+        pass: "",
+        pass2:""
+      },
       form: {
         name: "",
         lastName: "",
         address: "",
-        clientCode: `EM-${Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000}`
+        employeCode: `EM-${Math.floor(Math.random() * (9999 - 1000 + 1)) +
+          1000}`
       },
       dialogFormVisible: false,
       edit: true,
@@ -105,10 +109,56 @@ export default {
       img: false
     };
   },
+  mounted() {
+    this.get();
+  },
   methods: {
     changeImg: () => {
       console.log("change");
       this.img = true;
+    },
+    ...mapState({
+      service: state => state.services.employeeService
+    }),
+    get() {
+      this.service()
+        .getById(this.id)
+        .then(r => {
+          this.form.name = r.data.name;
+          this.form.lastName = r.data.lastName;
+          this.form.address = r.data.address;
+          this.form.employeCode = r.data.employeeCode;
+          this.imguser = r.data.avatar;
+          console.log(r);
+        })
+        .catch(e => console.log(e));
+    },
+    change() {
+      if(this.formpass.pass === this.formpass.pass2){
+        this.service()
+        .changePassword({ id: this.id, password: this.formpass.pass })
+        .then(r => {
+          this.$message({
+                message: "Contraseña cambiada",
+                type: "success"
+              });
+        }).catch(e => {
+          this.$message({
+                message: "Error al cambiar la contraseña",
+                type: "error"
+              });
+        })
+      }else{
+         this.$message({
+                message: "las contraseñas no coinciden",
+                type: "error"
+              });
+      }
+    }
+  },
+  computed: {
+    IMG() {
+      return API_IMAGES;
     }
   }
 };
@@ -122,5 +172,11 @@ export default {
 }
 .file {
   background: #000;
+}
+.img-cent {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 </style>

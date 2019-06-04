@@ -29,4 +29,5 @@ export default class ClientService {
   update(model) {
     return this.axios.put(`${this.apiUrl}/update`, model);
   }
+
 }

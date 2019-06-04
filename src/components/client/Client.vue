@@ -16,7 +16,11 @@
           <el-table-column label="Codigo" prop="clientCode"></el-table-column>
           <el-table-column label="Nombre" prop="name"></el-table-column>
           <el-table-column label="Apellidos" prop="lastName"></el-table-column>
-          <el-table-column label="Fecha de creacion" prop="createdAt"></el-table-column>
+          <el-table-column label="Fecha de creacion">
+              <template slot-scope="scope">
+              <p>{{(scope.row.createdAt).substr(0,10)}}</p>
+            </template>
+          </el-table-column>
           <el-table-column label="Dirreccion" prop="address"></el-table-column>
           <el-table-column align="right">
             <template slot="header" slot-scope="scope">

@@ -152,6 +152,7 @@ export default {
               });
               this.dialogFormVisible = false;
               EventBus.$emit("submitProduct");
+              EventBus.$emit('alert', "Se agrego un producto")
             })
             .catch(e => {
               this.$message({

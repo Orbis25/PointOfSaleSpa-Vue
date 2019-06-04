@@ -1,9 +1,10 @@
-export default class EmployeeService {
+export default class AlertService {
   axios;
   apiUrl;
   constructor(axios, apiUrl) {
     this.axios = axios;
-    this.apiUrl = `${apiUrl}/employee`;
+    this.apiUrl = `${apiUrl}/alert`;
+
     if (JSON.parse(localStorage.getItem("user")) != null) {
       this.axios.defaults.headers.common["Authorization"] =
         "Bearer " + JSON.parse(localStorage.getItem("user")).token;
@@ -18,29 +19,11 @@ export default class EmployeeService {
     return this.axios.post(`${this.apiUrl}/create`, model);
   }
 
-  getById(id) {
-    return this.axios.get(`${this.apiUrl}/getbyid/${id}`);
-  }
-
   remove(id) {
     return this.axios.delete(`${this.apiUrl}/${id}`);
   }
 
   update(model) {
-    return this.axios.put(`${this.apiUrl}/update`, model);
+    return this.axios.put(`${this.apiUrl}/viewall`, model);
   }
-
-  uploadImg(model) {
-    return this.axios.post(`${this.apiUrl}/upload/img`, model, {
-      headers: {
-        "Content-Type": "multipart/form-data"
-      }
-    });
-  }
-
-  changePassword(model){
-    return this.axios.post(`${this.apiUrl}/changes/password`,model);
-  }
-
-  
 }

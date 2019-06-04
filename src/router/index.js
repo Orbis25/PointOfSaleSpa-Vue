@@ -50,7 +50,8 @@ export default new Router({
       path: "/user/:id",
       name: "user",
       component: User,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      props:true
     },
     {
       path: "/sale",

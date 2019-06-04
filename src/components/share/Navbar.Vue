@@ -6,8 +6,8 @@
     <el-menu-item class="ml-5" index="2">
       <router-link tag="a" :to="{path:'/clients'}">Clientes</router-link>
     </el-menu-item>
-    <el-menu-item index="3">
-      <router-link tag="a" :to="{path:'/employes'}">Empleados</router-link>
+    <el-menu-item  v-if="role == 1" index="3">
+      <router-link tag="a"  index="2-1" :to="{path:'/employes'}">Empleados</router-link>
     </el-menu-item>
     <el-menu-item index="5">
       <router-link tag="a" :to="{path:'/suppliers'}">Supplidores</router-link>
@@ -21,8 +21,8 @@
 
     <el-submenu class="acctions" index="7">
       <template slot="title">Acciones</template>
-      <el-menu-item v-show="role != 1" index="2-1">
-        <router-link tag="p" :to="{path:'/user/id'}">Usuario</router-link>
+      <el-menu-item v-if="role != 1" index="2-1">
+        <router-link tag="p" :to="{path:'/user/'+id}">Usuario</router-link>
       </el-menu-item>
       <el-menu-item index="2-2">
         <router-link tag="p" :to="{path:'/sale'}">Ventas</router-link>
@@ -65,6 +65,10 @@ export default {
     role(){
       let user = JSON.parse(localStorage.getItem("user"));
       return user.userData.role
+    },
+    id(){
+      let user = JSON.parse(localStorage.getItem("user"));
+      return user.id
     }
   }
 };

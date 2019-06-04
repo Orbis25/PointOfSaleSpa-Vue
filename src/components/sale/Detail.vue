@@ -25,7 +25,6 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="exportToPdf()">imprimir</el-button>
-            <el-button type="primary" @click="dialogFormVisible = true">Enviar por correo</el-button>
           </el-form-item>
         </div>
       </div>

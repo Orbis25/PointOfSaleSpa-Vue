@@ -24,8 +24,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="submitClient()">Confirm</el-button>
+        <el-button @click="dialogFormVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="submitClient()">Confirmar</el-button>
       </span>
     </el-dialog>
   </div>
@@ -98,6 +98,7 @@ export default {
               this.dialogFormVisible = false;
               this.loading = false
               EventBus.$emit('submitClient')
+              EventBus.$emit('alert', "Se agrego un cliente")
             })
             .catch(e => {
               this.$message({

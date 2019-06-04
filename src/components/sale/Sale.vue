@@ -3,7 +3,7 @@
     <el-row :gutter="24">
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <h1 class="mb-4 ml-4 animated fadeIn">Ventas</h1>
-        <router-link tag="el-button" :to="{path:'/sale/add'}">Nueva</router-link>
+        <router-link tag="el-button" :to="{path:'/sale/add'}" v-show="role != 1">Nueva</router-link>
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
@@ -13,7 +13,11 @@
         >
           <el-table-column label="Codigo" prop="saleCode"></el-table-column>
           <el-table-column label="Nombre" prop="client.name"></el-table-column>
-          <el-table-column label="Fecha de creacion" prop="createdAt"></el-table-column>
+          <el-table-column label="Fecha de creacion">
+           <template slot-scope="scope">
+              <p>{{(scope.row.createdAt).substr(0,10)}}</p>
+            </template>
+          </el-table-column>
           <el-table-column label="Numero" prop="client.phoneNumber"></el-table-column>
           <el-table-column align="right">
             <template slot="header" slot-scope="scope">
@@ -23,11 +27,7 @@
               <router-link :to="{path:`sale/${scope.row.id}/detail`}">
                 <el-button size="mini" type="primary">ver</el-button>
               </router-link>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row);remove()"
-              >Eliminar</el-button>
+              <el-button size="mini" type="danger" @click="remove(scope.row.id)">Eliminar</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -50,7 +50,7 @@ export default {
     this.getAll();
     EventBus.$on("add", () => {
       this.getAll();
-    })
+    });
   },
   methods: {
     ...mapState({
@@ -63,17 +63,28 @@ export default {
         .catch(e => console.log(e));
     },
 
-    remove() {
+    remove(id) {
       this.$confirm("Seguro que desea eliminarla?", "Eliminar", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancelar",
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "venta eliminada"
-          });
+          this.service()
+            .remove(id)
+            .then(r => {
+              this.$message({
+                type: "success",
+                message: "venta eliminada"
+              });
+              this.getAll();
+            })
+            .catch(e => {
+              this.$message({
+                type: "error",
+                message: "Lo sentimos no se ha podido eliminar la venta"
+              });
+            })
         })
         .catch(() => {
           this.$message({
@@ -81,6 +92,15 @@ export default {
             message: "Operacion cancelada"
           });
         });
+    }
+  },
+  computed: {
+    role() {
+      let user = JSON.parse(localStorage.getItem("user"));
+      return user.userData.role;
+    },
+    dateConverter(date){
+      return date.s
     }
   }
 };
