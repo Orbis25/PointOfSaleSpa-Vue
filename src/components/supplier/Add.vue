@@ -80,7 +80,6 @@ export default {
                 type: "success"
               });
               EventBus.$emit('submitSupplier')
-              EventBus.$emit('alert', "Se agrego un suplidor")
               this.dialogFormVisible = false
             })
             .catch(e => {

@@ -199,7 +199,6 @@ export default {
               });
 
               EventBus.$emit("add");
-              EventBus.$emit('alert', "Se realizo una venta")
               this.$router.push("/sale");
             })
             .catch(e =>

@@ -139,7 +139,6 @@ export default {
               });
               this.dialogFormVisible = false;
               EventBus.$emit("submitEmployee");
-              EventBus.$emit('alert', "Se agrego un Empleado")
             })
             .catch(e => {
               this.$message({

@@ -11,6 +11,7 @@ import User from "../components/user/Profile";
 import Sale from "../components/sale/Sale";
 import AddSale from "../components/sale/Add";
 import Detail from "../components/sale/Detail";
+
 Vue.use(Router);
 export default new Router({
   routes: [

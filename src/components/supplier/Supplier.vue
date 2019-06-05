@@ -8,7 +8,7 @@
       <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
           v-loading="loading"
-          :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+          :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.createdAt.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
           height="600"
         >

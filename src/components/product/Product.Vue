@@ -16,7 +16,7 @@
         <el-col class="tab" :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
           <el-table
             v-loading="loading"
-            :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+            :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.createAt.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%"
             height="600"
           >
@@ -24,6 +24,12 @@
             <el-table-column label="Nombre" prop="name"></el-table-column>
             <el-table-column label="Cantidad" prop="quantity"></el-table-column>
             <el-table-column label="Precio" prop="price"></el-table-column>
+             <el-table-column label="Fecha de creacion">
+            <template slot-scope="scope">
+              <p>{{(scope.row.createAt).substr(0,10)}}</p>
+            </template>
+          </el-table-column>
+
             <el-table-column align="right">
               <template slot="header" slot-scope="scope">
                 <el-input v-model="search" size="mini" placeholder="Escriba para buscar"/>

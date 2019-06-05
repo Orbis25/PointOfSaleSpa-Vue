@@ -66,6 +66,7 @@ export default {
             this.auth(r.data);
             localStorage.setItem("user", JSON.stringify(r.data));
             this.$router.push("/home");
+            location.reload();
           } else {
             this.$notify({
               type: "warning",

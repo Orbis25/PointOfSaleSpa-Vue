@@ -1,14 +1,20 @@
 <template>
   <el-row :gutter="24">
     <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
-      <h1 class="mb-4 ml-4 animated fadeIn">Clientes</h1>
-      <add></add>
+      <h1 class="animated fadeIn">Clientes</h1>
+
+      <div class="row">
+        <div class="col">
+          <add></add>
+        </div>
+      </div>
     </el-col>
+
     <div>
       <el-col class="tab" :xs="24" :sm="24" :md="12" :lg="24" :xl="1">
         <el-table
           v-loading="loading"
-          :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+          :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.createdAt.toLowerCase().includes(search.toLowerCase())) "
           style="width: 100%"
           id="table-client"
           height="600"
@@ -17,7 +23,7 @@
           <el-table-column label="Nombre" prop="name"></el-table-column>
           <el-table-column label="Apellidos" prop="lastName"></el-table-column>
           <el-table-column label="Fecha de creacion">
-              <template slot-scope="scope">
+            <template slot-scope="scope">
               <p>{{(scope.row.createdAt).substr(0,10)}}</p>
             </template>
           </el-table-column>
@@ -51,7 +57,12 @@ export default {
     return {
       tableData: [],
       search: "",
-      loading: true
+      loading: true,
+      range: "",
+      form: {
+        startDate: "",
+        endDate: ""
+      }
     };
   },
   mounted() {
