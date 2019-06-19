@@ -206,7 +206,10 @@ export default {
                 message: "Lo sentimos la venta no se pudo realizar",
                 type: "error"
               })
-            );
+            )
+            .finally(() => {
+              this.$refs["formLabelAlign"].resetFields();
+            });
         }
       });
     },

@@ -88,8 +88,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer" v-show="!edit">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="update()">Confirm</el-button>
+        <el-button @click="dialogFormVisible = false; edit = true">Cancelar</el-button>
+        <el-button type="primary" @click="update()">Confirmar</el-button>
       </span>
     </el-dialog>
   </span>

@@ -79,14 +79,18 @@ export default {
                 message: "Suplidor agregado",
                 type: "success"
               });
-              EventBus.$emit('submitSupplier')
-              this.dialogFormVisible = false
+              EventBus.$emit("submitSupplier");
+              this.dialogFormVisible = false;
             })
             .catch(e => {
               this.$message({
                 message: e.response.data,
                 type: "error"
               });
+            })
+            .finally(() => {
+              this.$refs["form"].resetFields();
+              this.loading = false;
             });
         } else {
           return false;

@@ -161,7 +161,7 @@ export default {
 
       doc.setFont("helvetica");
       doc.setFontType("bold");
-      doc.text(150, 40, "Fecha :" + this.formLabelAlign.date);
+      doc.text(150, 40, "Fecha :" + (this.formLabelAlign.date).substr(0,10));
 
       doc.setFont("helvetica");
       doc.setFontType("bold");

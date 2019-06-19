@@ -146,7 +146,10 @@ export default {
                 type: "error"
               });
             })
-            .finally(() => (this.loading = false));
+            .finally(() => {
+              this.$refs["form"].resetFields();
+              this.loading = false;
+            });
         } else {
           return false;
         }
