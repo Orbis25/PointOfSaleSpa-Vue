@@ -1,4 +1,4 @@
-# my-project4
+# PointOfSale-Vuejs
 
 > A Vue.js project
 
