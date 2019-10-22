@@ -2,6 +2,8 @@
 
 > A Vue.js project
 
+admin user (admin@example.com)
+employeed user (employee@example.com)
 ## Build Setup
 
 ``` bash
