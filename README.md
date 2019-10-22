@@ -25,3 +25,6 @@ npm test
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+
+![point_ofsale](https://user-images.githubusercontent.com/38229144/67340549-160aed80-f504-11e9-9d9a-3bec5443e338.png)
