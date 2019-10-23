@@ -10,7 +10,7 @@ employeed user (employee@example.com)
 
 pass : employeed123
 
-## link backend: https://github.com/Orbis25/PointOfSaleNetCore-Api
+## link backend: https://github.com/Orbis25/PointOfSale-Api
 
 
 ## Build Setup
