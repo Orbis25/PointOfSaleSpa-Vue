@@ -3,7 +3,16 @@
 > A Vue.js project
 
 admin user (admin@example.com)
+
+pass : admin123
+
 employeed user (employee@example.com)
+
+pass : employeed123
+
+## link backend: https://github.com/Orbis25/PointOfSaleNetCore-Api
+
+
 ## Build Setup
 
 ``` bash
